@@ -1,0 +1,67 @@
+﻿@model Telemedicina.Web.Models.FichaPacienteViewModel
+
+
+@{
+    ViewBag.Title = "Atenciones";
+}
+
+<h2>Medical Record</h2>
+
+
+<div class="row">
+    <h3>Add Record</h3>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.LabelFor(x => x.Form.Enfermedad) <br />
+            @Html.TextBoxFor(x => x.Form.Enfermedad, new { @class = "form-control" }) <br />
+            @Html.ValidationMessageFor(x => x.Form.Enfermedad)
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(x => x.Form.Descripcion) <br />
+            @Html.TextBoxFor(x => x.Form.Descripcion, new { @class = "form-control" }) <br />
+            @Html.ValidationMessageFor(x => x.Form.Descripcion)
+        </div>
+        <div class="col-md-4">
+            <br />
+            <input type="submit" value="Add record" class="btn btn-primary" />
+        </div>
+        </div>
+        }
+    </div>
+<br /><br />
+        @if (Model.Fichas.Any())
+        {
+
+            <h3>Records</h3>
+
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th>Illness</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var atencion in Model.Fichas)
+                    {
+                        <tr>
+                            <td>
+                                @atencion.Enfermedad
+                            </td>
+                            <td>
+                                @atencion.Descripcion
+                    </td>
+                </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                There is no medical record
+            </div>
+        }

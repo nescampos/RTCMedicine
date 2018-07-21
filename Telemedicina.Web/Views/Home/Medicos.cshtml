@@ -1,0 +1,56 @@
+﻿@model Telemedicina.Web.Models.MedicosViewModel
+
+
+@{
+    ViewBag.Title = "Medicos";
+}
+
+<h2>Doctors</h2>
+
+
+<div class="row">
+<div class="col-md-4">
+         @Html.ActionLink("Add doctor","Crear","Medico",null,new { @class= "btn btn-success" })
+        </div>
+</div>
+
+<br /><br />
+<h3>List</h3>
+
+@if (Model.Medicos != null)
+{
+    if (Model.Medicos.Any())
+    {
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Specialty</th>
+                    <th>Email</th>
+                    <th>Creation Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var medico in Model.Medicos)
+                {
+                    <tr>
+                        <td>@medico.Nombre</td>
+                        <td>@medico.TipoMedico.Nombre</td>
+                        <td>@medico.EspecialidadMedico.Nombre</td>
+                        <td>@medico.Email</td>
+                        <td>@medico.FechaCreacion</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>There is no doctor available.</p>
+    }
+}
+else
+{
+    <p>You must find by filters.</p>
+}

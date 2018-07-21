@@ -1,0 +1,65 @@
+﻿@model Telemedicina.Web.Models.IndexMedicoViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (Model.Medico.Disponible)
+{
+    <div class="alert alert-info" role="alert">
+        You are available for patients. Are you available for new appointments? @Html.ActionLink("No", "Habilitar")
+    </div>
+}
+else
+{
+    if (Model.AtencionPendiente != null)
+    {
+        <div class="alert alert-warning" role="alert">
+            You have a patient. Will you take the call??@Html.ActionLink("Yes", "Aceptar","Agenda", new { id = Model.AtencionPendiente.IdAtencion },null) | @Html.ActionLink("No", "Cancelar","Agenda",new { id = Model.AtencionPendiente.IdAtencion },null)
+        </div>
+    }
+    else
+    {
+    <div class="alert alert-info" role="alert">
+        You are not available for patients. Do you want to be available? @Html.ActionLink("Yes", "Habilitar")
+    </div>
+    }
+}
+
+<h2>Medical Appointments</h2>
+
+
+@if (Model.Atenciones.Any())
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Start date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var atencion in Model.Atenciones)
+            {
+                <tr>
+                    <td>
+                        @atencion.Persona.NombreCompleto
+                    </td>
+                    <td>
+                        @atencion.FechaInicio
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details","Detalle","Agenda",new { id = atencion.IdAtencion },null)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        There is no history
+    </div>
+}

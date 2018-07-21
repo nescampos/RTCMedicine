@@ -1,0 +1,60 @@
+﻿@model Telemedicina.Core.Atencion
+
+
+@{
+    ViewBag.Title = "Detalle";
+}
+
+<h2>Appointment Details</h2>
+
+<table class="table table-responsive table-striped">
+    <tbody>
+        <tr>
+            <th>
+                Doctor
+            </th>
+            <td>
+                @Model.Medico.Nombre
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Type
+            </th>
+            <td>
+                @Model.Medico.EspecialidadMedico.Nombre
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Patient
+            </th>
+            <td>
+                @Model.Persona.NombreCompleto
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Start date
+            </th>
+            <td>
+                @Model.FechaInicio
+            </td>
+        </tr>
+        <tr>
+            <th>
+                End date
+            </th>
+            <td>
+                @Model.FechaFin
+            </td>
+        </tr>
+        
+    </tbody>
+</table>
+
+<h2>Notes from the doctor</h2> <br />
+<div class="alert alert-success" role="alert">
+    @Model.Notas
+</div>
+

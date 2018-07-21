@@ -1,0 +1,47 @@
+﻿@model Telemedicina.Web.Models.AtencionesViewModel
+
+
+@{
+    ViewBag.Title = "Atenciones";
+}
+
+<h2>Care History</h2>
+
+@if(Model.Atenciones.Any())
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Doctor</th>
+                <th>Done?</th>
+                <th>Date UTC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var atencion in Model.Atenciones)
+            {
+                <tr>
+                    <td>
+                        @atencion.Medico.TipoMedico.Nombre - @atencion.Medico.EspecialidadMedico.Nombre
+                    </td>
+                    <td>
+                        @atencion.Medico.Nombre
+                    </td>
+                    <td>
+                        @(atencion.EsProgramada ? "No" :"Yes")
+                    </td>
+                    <td>
+                        @atencion.FechaInicio
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        There is no history
+    </div>
+}

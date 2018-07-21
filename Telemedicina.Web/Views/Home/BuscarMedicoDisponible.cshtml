@@ -1,0 +1,72 @@
+﻿@model Telemedicina.Web.Models.BuscarMedicoDisponibleViewModel
+
+
+@{
+    ViewBag.Title = "BuscarMedicoDisponible";
+}
+
+<h2>Find doctor</h2>
+
+
+<div class="row">
+
+    @using (Html.BeginForm(null, null, FormMethod.Get))
+    {
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.LabelFor(x => x.Form.IdEspecialidadMedico) <br />
+                @Html.DropDownListFor(x => x.Form.IdEspecialidadMedico, Model.Especialidades, "Choose", new { @class = "form-control" }) <br />
+                @Html.ValidationMessageFor(x => x.Form.IdEspecialidadMedico)
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(x => x.Form.IdTipoMedico) <br />
+                @Html.DropDownListFor(x => x.Form.IdTipoMedico, Model.TipoMedico, "Choose", new { @class = "form-control" }) <br />
+                @Html.ValidationMessageFor(x => x.Form.IdTipoMedico)
+            </div>
+            <div class="col-md-4">
+                <br />
+                <input type="submit" value="Search" class="btn btn-info" />
+            </div>
+        </div>
+    }
+        
+ </div>
+
+<br /><br />
+<h3>Doctors</h3>
+
+@if(Model.Medicos != null)
+{
+    if(Model.Medicos.Any())
+    {
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Specialty</th>
+                    <th>Available</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var medico in Model.Medicos)
+                {
+                    <tr>
+                        <td>@medico.Nombre</td>
+                        <td>@medico.TipoMedico.Nombre</td>
+                        <td>@medico.EspecialidadMedico.Nombre</td>
+                        <td>@(medico.Disponible?Html.ActionLink("Yes", "Conectar", "Agenda",new { id = medico.IdMedico },null):MvcHtmlString.Create("No"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>There is no doctor available.</p>
+    }
+}
+else
+{
+    <p>You must find by filters.</p>
+}

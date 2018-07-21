@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>RTC Medicine</h1>
+    <p class="lead">Welcome to RTC Medicine, the platform where you can find doctors for your needs.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Find doctor</h2>
+        <p>
+            do you need attention? Find a doctor right now!!!
+        </p>
+        <p><a class="btn btn-default" href="@Url.Action("BuscarMedicoDisponible","Home")">Go to Find Doctor</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>My medical record</h2>
+        <p>Here, you can view/edit your medical records.</p>
+        <p><a class="btn btn-default" href="@Url.Action("Ficha","Paciente")">Medical record</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Care history</h2>
+        <p>Here you can view your care history in the platform</p>
+        <p><a class="btn btn-default" href="@Url.Action("Atenciones", "Paciente")">Care History</a></p>
+    </div>
+</div>
