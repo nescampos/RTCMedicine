@@ -1,0 +1,428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TelemedicinaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Atencion">
+          <Key>
+            <PropertyRef Name="IdAtencion" />
+          </Key>
+          <Property Name="IdAtencion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CodigoAtencion" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="IdPersona" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IdMedico" Type="int" Nullable="false" />
+          <Property Name="EsProgramada" Type="bit" Nullable="false" />
+          <Property Name="FechaInicio" Type="datetime" />
+          <Property Name="FechaFin" Type="datetime" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="Realizada" Type="bit" Nullable="false" />
+          <Property Name="DuracionEnMinutos" Type="int" />
+          <Property Name="Notas" Type="varchar" MaxLength="8000" />
+        </EntityType>
+        <EntityType Name="EspecialidadMedico">
+          <Key>
+            <PropertyRef Name="IdEspecialidadMedico" />
+          </Key>
+          <Property Name="IdEspecialidadMedico" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Habilitado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FichaPersona">
+          <Key>
+            <PropertyRef Name="IdFichaPersona" />
+          </Key>
+          <Property Name="IdFichaPersona" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IdPersona" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Enfermedad" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="800" Nullable="false" />
+          <Property Name="EsCronica" Type="bit" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Medico">
+          <Key>
+            <PropertyRef Name="IdMedico" />
+          </Key>
+          <Property Name="IdMedico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="400" Nullable="false" />
+          <Property Name="IdTipoMedico" Type="int" Nullable="false" />
+          <Property Name="IdEspecialidadMedico" Type="int" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="400" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="Disponible" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NombreCompleto" Type="varchar" MaxLength="400" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="date" />
+          <Property Name="Email" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoMedico">
+          <Key>
+            <PropertyRef Name="IdTipoMedico" />
+          </Key>
+          <Property Name="IdTipoMedico" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="EsMedicoGeneral" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Atencion_Medico">
+          <End Role="Medico" Type="Self.Medico" Multiplicity="1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medico">
+              <PropertyRef Name="IdMedico" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="IdMedico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Atencion_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FichaPersona_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
+          <End Role="FichaPersona" Type="Self.FichaPersona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="FichaPersona">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medico_EspecialidadMedico">
+          <End Role="EspecialidadMedico" Type="Self.EspecialidadMedico" Multiplicity="1" />
+          <End Role="Medico" Type="Self.Medico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EspecialidadMedico">
+              <PropertyRef Name="IdEspecialidadMedico" />
+            </Principal>
+            <Dependent Role="Medico">
+              <PropertyRef Name="IdEspecialidadMedico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medico_TipoMedico">
+          <End Role="TipoMedico" Type="Self.TipoMedico" Multiplicity="1" />
+          <End Role="Medico" Type="Self.Medico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoMedico">
+              <PropertyRef Name="IdTipoMedico" />
+            </Principal>
+            <Dependent Role="Medico">
+              <PropertyRef Name="IdTipoMedico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TelemedicinaModelStoreContainer">
+          <EntitySet Name="Atencion" EntityType="Self.Atencion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EspecialidadMedico" EntityType="Self.EspecialidadMedico" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FichaPersona" EntityType="Self.FichaPersona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medico" EntityType="Self.Medico" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoMedico" EntityType="Self.TipoMedico" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Atencion_Medico" Association="Self.FK_Atencion_Medico">
+            <End Role="Medico" EntitySet="Medico" />
+            <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Atencion_Persona" Association="Self.FK_Atencion_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FichaPersona_Persona" Association="Self.FK_FichaPersona_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="FichaPersona" EntitySet="FichaPersona" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medico_EspecialidadMedico" Association="Self.FK_Medico_EspecialidadMedico">
+            <End Role="EspecialidadMedico" EntitySet="EspecialidadMedico" />
+            <End Role="Medico" EntitySet="Medico" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medico_TipoMedico" Association="Self.FK_Medico_TipoMedico">
+            <End Role="TipoMedico" EntitySet="TipoMedico" />
+            <End Role="Medico" EntitySet="Medico" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TelemedicinaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Atencion">
+          <Key>
+            <PropertyRef Name="IdAtencion" />
+          </Key>
+          <Property Name="IdAtencion" Type="Guid" Nullable="false" />
+          <Property Name="CodigoAtencion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdPersona" Type="Guid" Nullable="false" />
+          <Property Name="IdMedico" Type="Int32" Nullable="false" />
+          <Property Name="EsProgramada" Type="Boolean" Nullable="false" />
+          <Property Name="FechaInicio" Type="DateTime" Precision="3" />
+          <Property Name="FechaFin" Type="DateTime" Precision="3" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Realizada" Type="Boolean" Nullable="false" />
+          <Property Name="DuracionEnMinutos" Type="Int32" />
+          <NavigationProperty Name="Persona" Relationship="TelemedicinaModel.FK_Atencion_Persona" FromRole="Atencion" ToRole="Persona" />
+          <NavigationProperty Name="Medico" Relationship="TelemedicinaModel.FK_Atencion_Medico" FromRole="Atencion" ToRole="Medico" />
+          <Property Name="Notas" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="EspecialidadMedico">
+          <Key>
+            <PropertyRef Name="IdEspecialidadMedico" />
+          </Key>
+          <Property Name="IdEspecialidadMedico" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Habilitado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Medicos" Relationship="TelemedicinaModel.FK_Medico_EspecialidadMedico" FromRole="EspecialidadMedico" ToRole="Medico" />
+        </EntityType>
+        <EntityType Name="TipoMedico">
+          <Key>
+            <PropertyRef Name="IdTipoMedico" />
+          </Key>
+          <Property Name="IdTipoMedico" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EsMedicoGeneral" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Medicos" Relationship="TelemedicinaModel.FK_Medico_TipoMedico" FromRole="TipoMedico" ToRole="Medico" />
+        </EntityType>
+        <EntityContainer Name="TelemedicinaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Atencions" EntityType="Self.Atencion" />
+          <EntitySet Name="EspecialidadMedicoes" EntityType="Self.EspecialidadMedico" />
+          <EntitySet Name="TipoMedicoes" EntityType="Self.TipoMedico" />
+          <EntitySet Name="FichaPersonas" EntityType="TelemedicinaModel.FichaPersona" />
+          <EntitySet Name="Personas" EntityType="TelemedicinaModel.Persona" />
+          <AssociationSet Name="FK_Atencion_Persona" Association="TelemedicinaModel.FK_Atencion_Persona">
+            <End Role="Persona" EntitySet="Personas" />
+            <End Role="Atencion" EntitySet="Atencions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FichaPersona_Persona" Association="TelemedicinaModel.FK_FichaPersona_Persona">
+            <End Role="Persona" EntitySet="Personas" />
+            <End Role="FichaPersona" EntitySet="FichaPersonas" />
+          </AssociationSet>
+          <EntitySet Name="Medicos" EntityType="TelemedicinaModel.Medico" />
+          <AssociationSet Name="FK_Atencion_Medico" Association="TelemedicinaModel.FK_Atencion_Medico">
+            <End Role="Medico" EntitySet="Medicos" />
+            <End Role="Atencion" EntitySet="Atencions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medico_EspecialidadMedico" Association="TelemedicinaModel.FK_Medico_EspecialidadMedico">
+            <End Role="EspecialidadMedico" EntitySet="EspecialidadMedicoes" />
+            <End Role="Medico" EntitySet="Medicos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Medico_TipoMedico" Association="TelemedicinaModel.FK_Medico_TipoMedico">
+            <End Role="TipoMedico" EntitySet="TipoMedicoes" />
+            <End Role="Medico" EntitySet="Medicos" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="FichaPersona">
+          <Key>
+            <PropertyRef Name="IdFichaPersona" />
+          </Key>
+          <Property Name="IdFichaPersona" Type="Guid" Nullable="false" />
+          <Property Name="IdPersona" Type="Guid" Nullable="false" />
+          <Property Name="Enfermedad" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="800" FixedLength="false" Unicode="false" />
+          <Property Name="EsCronica" Type="Boolean" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Persona" Relationship="TelemedicinaModel.FK_FichaPersona_Persona" FromRole="FichaPersona" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="Guid" Nullable="false" />
+          <Property Name="NombreCompleto" Type="String" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="FechaNacimiento" Type="DateTime" Precision="0" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Atencions" Relationship="TelemedicinaModel.FK_Atencion_Persona" FromRole="Persona" ToRole="Atencion" />
+          <NavigationProperty Name="FichaPersonas" Relationship="TelemedicinaModel.FK_FichaPersona_Persona" FromRole="Persona" ToRole="FichaPersona" />
+        </EntityType>
+        <Association Name="FK_Atencion_Persona">
+          <End Type="TelemedicinaModel.Persona" Role="Persona" Multiplicity="1" />
+          <End Type="TelemedicinaModel.Atencion" Role="Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FichaPersona_Persona">
+          <End Type="TelemedicinaModel.Persona" Role="Persona" Multiplicity="1" />
+          <End Type="TelemedicinaModel.FichaPersona" Role="FichaPersona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="FichaPersona">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Medico">
+          <Key>
+            <PropertyRef Name="IdMedico" />
+          </Key>
+          <Property Name="IdMedico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="IdTipoMedico" Type="Int32" Nullable="false" />
+          <Property Name="IdEspecialidadMedico" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Atencions" Relationship="TelemedicinaModel.FK_Atencion_Medico" FromRole="Medico" ToRole="Atencion" />
+          <NavigationProperty Name="EspecialidadMedico" Relationship="TelemedicinaModel.FK_Medico_EspecialidadMedico" FromRole="Medico" ToRole="EspecialidadMedico" />
+          <NavigationProperty Name="TipoMedico" Relationship="TelemedicinaModel.FK_Medico_TipoMedico" FromRole="Medico" ToRole="TipoMedico" />
+          <Property Name="Disponible" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Atencion_Medico">
+          <End Type="TelemedicinaModel.Medico" Role="Medico" Multiplicity="1" />
+          <End Type="TelemedicinaModel.Atencion" Role="Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medico">
+              <PropertyRef Name="IdMedico" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="IdMedico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medico_EspecialidadMedico">
+          <End Type="TelemedicinaModel.EspecialidadMedico" Role="EspecialidadMedico" Multiplicity="1" />
+          <End Type="TelemedicinaModel.Medico" Role="Medico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EspecialidadMedico">
+              <PropertyRef Name="IdEspecialidadMedico" />
+            </Principal>
+            <Dependent Role="Medico">
+              <PropertyRef Name="IdEspecialidadMedico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Medico_TipoMedico">
+          <End Type="TelemedicinaModel.TipoMedico" Role="TipoMedico" Multiplicity="1" />
+          <End Type="TelemedicinaModel.Medico" Role="Medico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoMedico">
+              <PropertyRef Name="IdTipoMedico" />
+            </Principal>
+            <Dependent Role="Medico">
+              <PropertyRef Name="IdTipoMedico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TelemedicinaModelStoreContainer" CdmEntityContainer="TelemedicinaEntities">
+          <EntitySetMapping Name="Atencions">
+            <EntityTypeMapping TypeName="TelemedicinaModel.Atencion">
+              <MappingFragment StoreEntitySet="Atencion">
+                <ScalarProperty Name="Notas" ColumnName="Notas" />
+                <ScalarProperty Name="IdAtencion" ColumnName="IdAtencion" />
+                <ScalarProperty Name="CodigoAtencion" ColumnName="CodigoAtencion" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+                <ScalarProperty Name="IdMedico" ColumnName="IdMedico" />
+                <ScalarProperty Name="EsProgramada" ColumnName="EsProgramada" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Realizada" ColumnName="Realizada" />
+                <ScalarProperty Name="DuracionEnMinutos" ColumnName="DuracionEnMinutos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EspecialidadMedicoes">
+            <EntityTypeMapping TypeName="TelemedicinaModel.EspecialidadMedico">
+              <MappingFragment StoreEntitySet="EspecialidadMedico">
+                <ScalarProperty Name="IdEspecialidadMedico" ColumnName="IdEspecialidadMedico" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Habilitado" ColumnName="Habilitado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoMedicoes">
+            <EntityTypeMapping TypeName="TelemedicinaModel.TipoMedico">
+              <MappingFragment StoreEntitySet="TipoMedico">
+                <ScalarProperty Name="IdTipoMedico" ColumnName="IdTipoMedico" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="EsMedicoGeneral" ColumnName="EsMedicoGeneral" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FichaPersonas">
+            <EntityTypeMapping TypeName="TelemedicinaModel.FichaPersona">
+              <MappingFragment StoreEntitySet="FichaPersona">
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="EsCronica" ColumnName="EsCronica" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Enfermedad" ColumnName="Enfermedad" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+                <ScalarProperty Name="IdFichaPersona" ColumnName="IdFichaPersona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Personas">
+            <EntityTypeMapping TypeName="TelemedicinaModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicos">
+            <EntityTypeMapping TypeName="TelemedicinaModel.Medico">
+              <MappingFragment StoreEntitySet="Medico">
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IdEspecialidadMedico" ColumnName="IdEspecialidadMedico" />
+                <ScalarProperty Name="IdTipoMedico" ColumnName="IdTipoMedico" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdMedico" ColumnName="IdMedico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
